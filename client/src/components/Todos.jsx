@@ -1,21 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import EditTodo from './EditTodo';
+import { useAsyncData } from './useFetch';
 
-const Todos = ({loading,error,list,setIsSubmit}) => {
-
-    const handleDelete = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/pg/todo/${id}`,{
-                method:'DELETE',
-                headers:{
-                    "Content-Type":"application/json"
-                },
-            });
-            const data = await response.json();
-            data && setIsSubmit(true);
-        } catch (error) {
-            console.error(error.message);
+const Todos = ({fetchData,setFetchData}) => {
+    let { url, method, body } = fetchData;
+    let { isLoading:loading,error,data:list,loadData} = useAsyncData({
+        fetchFn:()=>{
+            if(method === 'GET'){
+                return fetch(url)
+            } else {
+                return fetch(url,{
+                    method,
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify(body)
+                })
+            }
         }
+    });
+
+    useEffect(()=>{
+        loadData();
+    },[fetchData])
+
+
+    const handleDelete = (id)=> {
+        setFetchData({
+            ...fetchData,
+            url: `http://localhost:5000/api/pg/todo/${id}`,
+            method:'DELETE',
+            body:{}
+        });
     }
 
     if(loading){
@@ -50,8 +66,9 @@ const Todos = ({loading,error,list,setIsSubmit}) => {
                                         <td>{item.description}</td>
                                         <td>
                                             <EditTodo 
-                                                setIsSumbit={setIsSubmit}
                                                 id={item.todo_id}
+                                                fetchData={fetchData}
+                                                setFetchData={setFetchData}
                                             />
                                         </td>
                                         <td>
@@ -68,7 +85,9 @@ const Todos = ({loading,error,list,setIsSubmit}) => {
             )
     } else {
         return(
-            <h1 className="text-center mt-5 text-success">No Todos... all finished</h1>
+            <>
+                <h1 className="text-center mt-5 text-success">No Todos... all finished</h1>
+            </>
         )
     }
 

@@ -1,25 +1,15 @@
 import React, { } from 'react'
 import { useForm, Form } from './useForm';
 
-const EditTodo = ({setIsSubmit,id}) => {
+const EditTodo = ({fetchData,setFetchData,id}) => {
 
-    const callback = async (id) => {
-        console.log('hello',id);
-        try {
-            const body = { description:values.description };
-            const response = await fetch(`http://localhost:5000/api/pg/todo/${id}`,{
-                method:'PUT',
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify(body),
-            });
-            const data = await response.json();
-            console.log(data);
-            data && setIsSubmit(true);
-        } catch (error) {
-            console.error(error.message);
-        }
+    const callback = async () => {
+        setFetchData({
+            ...fetchData,
+            url: `http://localhost:5000/api/pg/todo/${id}`,
+            method:'PUT',
+            body:{ description:values.description }
+        });
     }   
     
     let {
@@ -27,8 +17,7 @@ const EditTodo = ({setIsSubmit,id}) => {
         onSubmit,
         values,
         regex
-    } = useForm(callback,{description:''},`${id}`);
-    console.log(onSubmit)
+    } = useForm(callback,{description:''});
 
     return (
         <>
@@ -45,7 +34,7 @@ const EditTodo = ({setIsSubmit,id}) => {
                             <button type="button" className="close btn" data-dismiss="modal">&times;</button>
                         </div>
                         <div className="modal-body">
-                            <Form className="d-flex" onSubmit={onSubmit} id={id}>
+                            <Form className="d-flex">
                                 <input 
                                     type="text" 
                                     id="text" 
@@ -58,6 +47,7 @@ const EditTodo = ({setIsSubmit,id}) => {
                                     className="btn btn-success" 
                                     data-dismiss="modal" 
                                     disabled={regex.test(Object.values(values)) === true || Object.values(values).includes('') === true ? true : false}
+                                    onClick={onSubmit}
                                 >
                                     Edit
                                 </button>

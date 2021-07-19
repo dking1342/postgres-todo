@@ -24,9 +24,10 @@ export const postTodos = async (req,res) => {
     try {
         const { description } = req.body;
         const newTodo = await pool.query("INSERT INTO todo (description) VALUES($1) RETURNING *",[description]);        
-
+        
         if(newTodo) {
-            res.status(201).json({success:true,payload:newTodo.rows[0]});
+            let newTodos = await pool.query("SELECT * FROM todo");
+            res.status(201).json({success:true,payload:newTodos.rows});
         } else {
             res.status(400).json({success:false,payload:'database entry fail'});
         }
@@ -44,7 +45,10 @@ export const updateTodos = async (req,res) => {
         
         if(updateTodo){
             let updatedTodo = await pool.query("SELECT * FROM todo WHERE todo_id = $1",[id]);
-            updatedTodo && res.status(200).json({success:true,payload:updatedTodo.rows[0]});
+            if(updatedTodo){
+                let newTodos = await pool.query("SELECT * FROM todo");
+                res.status(200).json({success:true,payload:newTodos.rows});
+            }
         }
     } catch (error) {
         res.status(400).json({success:true,payload:'Bad Request'});        
@@ -55,7 +59,10 @@ export const deleteTodos = async (req,res) => {
     try {
         const { id } = req.params;
         const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1",[id]);
-        deleteTodo && res.status(200).json({success:true,payload:'todo deleted'});
+        if(deleteTodo){
+            let newTodos = await pool.query("SELECT * FROM todo");
+            res.status(200).json({success:true,payload:newTodos.rows});
+        }
     } catch (error) {
         res.status(400).json({success:true,payload:'Bad Request'});
     }

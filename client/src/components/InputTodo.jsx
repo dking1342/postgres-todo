@@ -1,23 +1,15 @@
 import React, {  } from 'react'
 import { Form, useForm } from './useForm';
 
-const InputTodo = ({setIsSubmit}) => {
+const InputTodo = ({fetchData,setFetchData}) => {
 
     const callback = async () => {
-        try {
-            const body = { description:values.description };
-            const response = await fetch('http://localhost:5000/api/pg/todo',{
-                method:'POST',
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify(body),
-            });
-            const data = await response.json();
-            data && setIsSubmit(true);
-        } catch (error) {
-            console.error(error.message);
-        }
+        setFetchData({
+            ...fetchData,
+            url:'http://localhost:5000/api/pg/todo',
+            method:'POST',
+            body:{ description:values.description }
+        })
     }
 
     let { 

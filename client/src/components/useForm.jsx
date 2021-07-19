@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-export const useForm = (callback,initialState = {},args = []) => {
+
+
+export const useForm = (callback,initialState = {}) => {
     const [values, setValues] = useState(initialState);
-    console.log('args',args)
 
     const onChange = (e) => {
         setValues({
@@ -18,7 +19,7 @@ export const useForm = (callback,initialState = {},args = []) => {
     const onSubmit = (e) => {
         e.preventDefault();
         console.log('submit');
-        callback(args);
+        callback();
         resetForm();
     }
 
@@ -36,7 +37,6 @@ export const useForm = (callback,initialState = {},args = []) => {
 
 
 export const Form = ({onSubmit,children,...rest}) => {
-    console.log('rest',rest,rest.id)
 
     return(
         <form onSubmit={onSubmit} {...rest}>
