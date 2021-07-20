@@ -1,7 +1,9 @@
-import React, { } from 'react'
+import React, { useContext } from 'react'
+import { AppContext } from '../context/store';
 import { useForm, Form } from './useForm';
 
-const EditTodo = ({fetchData,setFetchData,id}) => {
+const EditTodo = ({id}) => {
+    let { fetchData, setFetchData } = useContext(AppContext);
 
     const callback = async () => {
         setFetchData({
@@ -24,7 +26,6 @@ const EditTodo = ({fetchData,setFetchData,id}) => {
             <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#myModal">
                 Edit
             </button>
-            
             
             <div className="modal fade" id="myModal">
                 <div className="modal-dialog">

@@ -18,14 +18,12 @@ export const useForm = (callback,initialState = {}) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log('submit');
         callback();
         resetForm();
     }
 
     const regex = /^[\s].*$/;
-
-
+    
     return {
         onChange,
         resetForm,

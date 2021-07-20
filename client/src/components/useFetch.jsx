@@ -1,47 +1,61 @@
 import { useCallback, useEffect, useState } from 'react';
 
-export const useFetch = (
-    url,
-    method='GET',
-    body='',
-    immediate=true
-) => {
-    const [loading,setLoading] = useState(false);
-    const [error,setError] = useState('');
-    const [data, setData] = useState([]);
+// export const useFetch = (
+//     url,
+//     method='GET',
+//     body='',
+//     immediate=true
+// ) => {
+//     const [loading,setLoading] = useState(false);
+//     const [error,setError] = useState('');
+//     const [data, setData] = useState([]);
 
-    const fetchData = useCallback(async()=>{
-        setLoading(true);
-        let response;
-        try {
-            if(method === 'GET'){
-                response = await fetch(url);
-            } else {
-                response = await fetch(url,{
-                  method,
-                  headers:{
-                      "Content-Type":"application/json"
-                  },
-                  body: JSON.stringify(body),        
-                });
-            }
-            const data = await response.json();
-            data && setData(data.payload);
-        } catch (error) {
-            setError(error.message);
-        }
-        setLoading(false);
-    },[url,method,body])
+//     const fetchData = useCallback(async()=>{
+//         setLoading(true);
+//         let response;
+//         try {
+//             if(method === 'GET'){
+//                 response = await fetch(url);
+//             } else {
+//                 response = await fetch(url,{
+//                   method,
+//                   headers:{
+//                       "Content-Type":"application/json"
+//                   },
+//                   body: JSON.stringify(body),        
+//                 });
+//             }
+//             const data = await response.json();
+//             data && setData(data.payload);
+//         } catch (error) {
+//             setError(error.message);
+//         }
+//         setLoading(false);
+//     },[url,method,body])
 
-    useEffect(()=>{
-        if(immediate) fetchData();
-    },[immediate,fetchData]);
+//     useEffect(()=>{
+//         if(immediate) fetchData();
+//     },[immediate,fetchData]);
 
-    return{
-        loading,
-        error,
-        data,
-        fetchData
+//     return{
+//         loading,
+//         error,
+//         data,
+//         fetchData
+//     }
+// }
+
+export const callback = (url,method,body) => {
+    if(method === 'GET'){
+        return fetch(url)
+    } else {
+        return fetch(url,{
+            method,
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(body)
+        })
     }
 }
 
@@ -49,7 +63,7 @@ export const useFetch = (
 // fetchFn (required): the function to execute to get data
 // loadOnMount (opt): load the data on component mount
 // clearDataOnLoad (opt): clear old data on new load regardless of success state
-export const useAsyncData = ({
+export const useFetch = ({
     loadOnMount = false,
     clearDataOnLoad = false,
     fetchFn = null,

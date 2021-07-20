@@ -40,7 +40,6 @@ export const updateTodos = async (req,res) => {
     try {
         const { id } = req.params;
         const { description } = req.body;
-        console.log('des',description)
         const updateTodo = await pool.query("UPDATE todo SET description = $1 WHERE todo_id = $2",[description,id]);
         
         if(updateTodo){
@@ -65,5 +64,17 @@ export const deleteTodos = async (req,res) => {
         }
     } catch (error) {
         res.status(400).json({success:true,payload:'Bad Request'});
+    }
+}
+
+export const deleteAllTodos = async (req,res) => {
+    try {
+        const deleteTodos = await pool.query("DELETE FROM todo");
+        if(deleteTodos){
+            let newTodos = await pool.query("SELECT * FROM todo");
+            res.status(200).json({success:true,payload:newTodos.rows})
+        }
+    } catch (error) {
+        res.status(400).json({success:true,payload:'Bad Request'});        
     }
 }

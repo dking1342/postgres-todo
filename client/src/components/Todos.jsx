@@ -1,29 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useContext } from 'react'
+import { AppContext } from '../context/store';
 import EditTodo from './EditTodo';
-import { useAsyncData } from './useFetch';
 
-const Todos = ({fetchData,setFetchData}) => {
-    let { url, method, body } = fetchData;
-    let { isLoading:loading,error,data:list,loadData} = useAsyncData({
-        fetchFn:()=>{
-            if(method === 'GET'){
-                return fetch(url)
-            } else {
-                return fetch(url,{
-                    method,
-                    headers:{
-                        "Content-Type":"application/json"
-                    },
-                    body:JSON.stringify(body)
-                })
-            }
-        }
-    });
-
-    useEffect(()=>{
-        loadData();
-    },[fetchData])
-
+const Todos = () => {
+    let { fetchData, setFetchData, state: {loading,error,todos:list} } = useContext(AppContext);
 
     const handleDelete = (id)=> {
         setFetchData({

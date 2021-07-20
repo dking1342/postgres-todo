@@ -1,7 +1,9 @@
-import React, {  } from 'react'
+import React, { useContext } from 'react'
+import { AppContext } from '../context/store';
 import { Form, useForm } from './useForm';
 
-const InputTodo = ({fetchData,setFetchData}) => {
+const InputTodo = () => {
+    let { fetchData, setFetchData } = useContext(AppContext);
 
     const callback = async () => {
         setFetchData({

@@ -2,6 +2,7 @@ import express from 'express';
 
 const router = express.Router();
 import { 
+    deleteAllTodos,
     deleteTodos, 
     getTodo, 
     getTodos, 
@@ -15,5 +16,6 @@ router.get('/todo/:id',getTodo);
 router.post('/todo',postTodos);
 router.put('/todo/:id',updateTodos);
 router.delete('/todo/:id',deleteTodos);
+router.delete('/todos',deleteAllTodos);
 
 export default router;
