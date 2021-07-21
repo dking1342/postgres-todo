@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import CONSTANTS from '../gql/constants';
 import { query } from '../gql/query';
+import DeleteTodo2 from './DeleteTodo2';
 import EditTodo2 from './EditTodo2';
 
 const Todos2 = () => {
@@ -43,12 +44,13 @@ const Todos2 = () => {
                                             />
                                         </td>
                                         <td>
-                                            <button 
+                                            <DeleteTodo2 id={item.todo_id} />
+                                            {/* <button 
                                                 className="btn btn-danger" 
                                                 // onClick={()=>handleDelete(item.todo_id)}
                                             >
                                                 Delete
-                                            </button> 
+                                            </button>  */}
                                         </td>
                                     </tr>
                                 ))
